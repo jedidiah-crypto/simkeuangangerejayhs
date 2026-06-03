@@ -17,7 +17,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::resource('pemasukan', PemasukanController::class)->except(['show']);
     Route::resource('pengeluaran', PengeluaranController::class)->except(['show']);
     Route::post('pengeluaran/{pengeluaran}/approve', [PengeluaranController::class,'approve'])->name('pengeluaran.approve');
-    Route::resource('donatur', DonaturController::class)->only(['index','show']);
+    Route::resource('donatur', DonaturController::class);
     
     Route::get('reports/period', [ReportController::class,'period'])->name('reports.period');
     Route::get('reports/income', [ReportController::class,'incomeReport'])->name('reports.income');
