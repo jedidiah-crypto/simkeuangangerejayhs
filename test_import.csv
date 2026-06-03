@@ -1,0 +1,5 @@
+﻿type,tanggal,nominal,kategori,metode,sumber_dana,keterangan
+pemasukan,2026-06-01,1500000,Persembahan,Transfer,Donatur,Donasi rutin minggu
+pemasukan,2026-06-02,500000,Sumbangan Khusus,Tunai,Jemaat,Sumbangan ibadah
+pengeluaran,2026-06-01,750000,Operasional Gereja,Tunai,,Belanja perlengkapan
+pengeluaran,2026-06-03,250000,Kesehatan,Transfer,,Biaya pemeliharaan gereja
