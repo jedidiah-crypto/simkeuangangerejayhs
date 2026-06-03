@@ -5,6 +5,7 @@ use App\Http\Controllers\PemasukanController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\DonaturController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('reports/import/history/csv', [ReportController::class,'exportImportHistoryCsv'])->name('reports.import.history.csv');
     Route::get('reports/export/pdf', [ReportController::class,'exportPdf'])->name('reports.export.pdf');
     Route::get('reports/export/excel', [ReportController::class,'exportExcel'])->name('reports.export.excel');
+    
+    Route::get('import', [ImportController::class,'show'])->name('import.show');
+    Route::post('import', [ImportController::class,'process'])->name('import.process');
+    Route::get('import/template', [ImportController::class,'downloadTemplate'])->name('import.template');
     
     Route::middleware(['role:bendahara'])->group(function(){
         Route::get('bendahara/dashboard', function(){ return view('dashboard'); })->name('bendahara.dashboard');
