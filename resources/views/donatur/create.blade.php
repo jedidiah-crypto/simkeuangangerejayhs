@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div style="display:flex;align-items:center;gap:1rem;">
-            <a href="{{ route('donatur.index') }}" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#94a3b8;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">
+            <a href="{{ route('donatur.index') }}" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:rgba(180,140,50,0.06);border:1px solid var(--border);color:#57534e;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(180,140,50,0.1)'" onmouseout="this.style.background='rgba(180,140,50,0.06)'">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
             <div>
                 <p style="font-size:0.72rem;font-weight:600;color:#06b6d4;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">Tambah Data</p>
-                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#e2e8f0;margin:0;">Tambah Donatur</h1>
+                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#1a1200;margin:0;">Tambah Donatur</h1>
             </div>
         </div>
     </x-slot>
@@ -19,8 +19,8 @@
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#22d3ee"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     </div>
                     <div>
-                        <p style="font-size:0.875rem;font-weight:600;color:#e2e8f0;">Data Donatur Baru</p>
-                        <p style="font-size:0.75rem;color:#64748b;">Tambahkan informasi donatur lengkap</p>
+                        <p style="font-size:0.875rem;font-weight:600;color:#1a1200;">Data Donatur Baru</p>
+                        <p style="font-size:0.75rem;color:#78716c;">Tambahkan informasi donatur lengkap</p>
                     </div>
                 </div>
             </div>

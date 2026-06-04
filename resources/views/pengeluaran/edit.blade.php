@@ -1,12 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div style="display:flex;align-items:center;gap:1rem;">
-            <a href="{{ route('pengeluaran.index') }}" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:#94a3b8;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">
+            <a href="{{ route('pengeluaran.index') }}" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:rgba(180,140,50,0.06);border:1px solid var(--border);color:#57534e;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='rgba(180,140,50,0.1)'" onmouseout="this.style.background='rgba(180,140,50,0.06)'">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
             <div>
                 <p style="font-size:0.72rem;font-weight:600;color:#f43f5e;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">Edit Data</p>
-                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#e2e8f0;margin:0;">Edit Pengeluaran</h1>
+                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#1a1200;margin:0;">Edit Pengeluaran</h1>
             </div>
         </div>
     </x-slot>
@@ -19,8 +19,8 @@
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fb7185"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/></svg>
                     </div>
                     <div>
-                        <p style="font-size:0.875rem;font-weight:600;color:#e2e8f0;">{{ $pengeluaran->nomor_transaksi }}</p>
-                        <p style="font-size:0.75rem;color:#64748b;">Ubah detail transaksi pengeluaran</p>
+                        <p style="font-size:0.875rem;font-weight:600;color:#1a1200;">{{ $pengeluaran->nomor_transaksi }}</p>
+                        <p style="font-size:0.75rem;color:#78716c;">Ubah detail transaksi pengeluaran</p>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                             </div>
                             <div style="flex:1;">
                                 <p style="font-size:0.875rem;color:#fb7185;font-weight:600;">Nota Saat Ini</p>
-                                <p style="font-size:0.75rem;color:#94a3b8;margin-top:0.2rem;">
+                                <p style="font-size:0.75rem;color:#57534e;margin-top:0.2rem;">
                                     <a href="{{ asset('storage/' . $pengeluaran->nota) }}" target="_blank" style="color:#38bdf8;text-decoration:underline;">Lihat File</a>
                                 </p>
                             </div>
@@ -90,8 +90,8 @@
                         <input type="file" name="nota" id="nota-file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" onchange="showFileName(this)">
                         <div id="dropzoneContent">
                             <div style="font-size:1.75rem;margin-bottom:0.5rem;">🧾</div>
-                            <p style="font-size:0.83rem;color:#94a3b8;">Klik atau drag & drop struk/nota</p>
-                            <p style="font-size:0.72rem;color:#64748b;margin-top:0.2rem;">PNG, JPG hingga 2MB</p>
+                            <p style="font-size:0.83rem;color:#57534e;">Klik atau drag & drop struk/nota</p>
+                            <p style="font-size:0.72rem;color:#78716c;margin-top:0.2rem;">PNG, JPG hingga 2MB</p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                 document.getElementById('dropzoneContent').innerHTML = `
                     <div style="font-size:1.5rem;margin-bottom:0.5rem;">✅</div>
                     <p style="font-size:0.83rem;color:#34d399;font-weight:600;">${input.files[0].name}</p>
-                    <p style="font-size:0.72rem;color:#64748b;margin-top:0.2rem;">${(input.files[0].size/1024).toFixed(1)} KB</p>
+                    <p style="font-size:0.72rem;color:#78716c;margin-top:0.2rem;">${(input.files[0].size/1024).toFixed(1)} KB</p>
                 `;
             }
         }

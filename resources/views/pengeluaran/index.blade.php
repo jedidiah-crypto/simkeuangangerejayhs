@@ -3,8 +3,8 @@
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
             <div>
                 <p style="font-size:0.72rem;font-weight:600;color:#f43f5e;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.2rem;">Manajemen Dana</p>
-                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#e2e8f0;margin:0;">Daftar Pengeluaran</h1>
-                <p style="font-size:0.8rem;color:#64748b;margin-top:0.2rem;">Catat dan kelola status pengeluaran gereja</p>
+                <h1 class="font-display" style="font-size:1.4rem;font-weight:700;color:#1a1200;margin:0;">Daftar Pengeluaran</h1>
+                <p style="font-size:0.8rem;color:#78716c;margin-top:0.2rem;">Catat dan kelola status pengeluaran gereja</p>
             </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
                 <a href="{{ route('reports.import.form') }}" class="btn-ghost" style="font-size:0.8rem;">
@@ -23,19 +23,19 @@
     <div class="glass-card animate-in" style="padding:1rem 1.5rem;margin-bottom:1rem;">
         <form method="GET" action="{{ route('pengeluaran.index') }}" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end;">
             <div>
-                <label style="font-size:0.73rem;color:#94a3b8;display:block;margin-bottom:0.3rem;font-weight:500;">Cari Keterangan</label>
+                <label style="font-size:0.73rem;color:#57534e;display:block;margin-bottom:0.3rem;font-weight:500;">Cari Keterangan</label>
                 <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari keterangan..."
-                    style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.45rem 0.85rem;color:#e2e8f0;font-size:0.82rem;outline:none;width:190px;">
+                    style="background:#fefcf7;border:1px solid rgba(180,140,50,0.2);border-radius:10px;padding:0.45rem 0.85rem;color:#1a1200;font-size:0.82rem;outline:none;width:190px;">
             </div>
             <div>
-                <label style="font-size:0.73rem;color:#94a3b8;display:block;margin-bottom:0.3rem;font-weight:500;">Dari Tanggal</label>
+                <label style="font-size:0.73rem;color:#57534e;display:block;margin-bottom:0.3rem;font-weight:500;">Dari Tanggal</label>
                 <input type="date" name="from" value="{{ request('from') }}"
-                    style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.45rem 0.85rem;color:#e2e8f0;font-size:0.82rem;outline:none;">
+                    style="background:#fefcf7;border:1px solid rgba(180,140,50,0.2);border-radius:10px;padding:0.45rem 0.85rem;color:#1a1200;font-size:0.82rem;outline:none;">
             </div>
             <div>
-                <label style="font-size:0.73rem;color:#94a3b8;display:block;margin-bottom:0.3rem;font-weight:500;">Sampai Tanggal</label>
+                <label style="font-size:0.73rem;color:#57534e;display:block;margin-bottom:0.3rem;font-weight:500;">Sampai Tanggal</label>
                 <input type="date" name="to" value="{{ request('to') }}"
-                    style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.45rem 0.85rem;color:#e2e8f0;font-size:0.82rem;outline:none;">
+                    style="background:#fefcf7;border:1px solid rgba(180,140,50,0.2);border-radius:10px;padding:0.45rem 0.85rem;color:#1a1200;font-size:0.82rem;outline:none;">
             </div>
             <button type="submit" class="btn-primary" style="font-size:0.82rem;">Filter</button>
             @if(request()->hasAny(['q','from','to']))
@@ -47,7 +47,7 @@
     <div class="glass-card animate-in" style="overflow:hidden;">
         <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0.5rem;">
             <div style="width:8px;height:8px;border-radius:50%;background:#f43f5e;box-shadow:0 0 8px rgba(244,63,94,0.6);"></div>
-            <span style="font-size:0.8rem;color:#94a3b8;">{{ $items->total() ?? 0 }} transaksi ditemukan</span>
+            <span style="font-size:0.8rem;color:#57534e;">{{ $items->total() ?? 0 }} transaksi ditemukan</span>
         </div>
         <div style="overflow-x:auto;">
             <table class="data-table">
@@ -71,14 +71,14 @@
                                     {{ $item->nomor_transaksi }}
                                 </span>
                             </td>
-                            <td style="color:#94a3b8;font-size:0.83rem;">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
+                            <td style="color:#57534e;font-size:0.83rem;">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                             <td><span class="amount-out" style="font-family:'Sora',sans-serif;">-Rp {{ number_format($item->nominal,0,',','.') }}</span></td>
                             <td>
-                                <span style="font-size:0.78rem;color:#94a3b8;background:rgba(255,255,255,0.04);padding:0.2rem 0.6rem;border-radius:6px;">
+                                <span style="font-size:0.78rem;color:#57534e;background:rgba(180,140,50,0.06);padding:0.2rem 0.6rem;border-radius:6px;border:1px solid rgba(180,140,50,0.12);">
                                     {{ $item->kategori->nama ?? '-' }}
                                 </span>
                             </td>
-                            <td style="color:#94a3b8;font-size:0.83rem;">{{ $item->metode ?? '-' }}</td>
+                            <td style="color:#57534e;font-size:0.83rem;">{{ $item->metode ?? '-' }}</td>
                             <td>
                                 @if($item->status === 'approved')
                                     <span class="badge badge-green">
@@ -99,7 +99,7 @@
                                         Lihat
                                     </a>
                                 @else
-                                    <span style="font-size:0.78rem;color:#475569;">—</span>
+                                    <span style="font-size:0.78rem;color:#6b7280;">—</span>
                                 @endif
                             </td>
                             <td>
@@ -121,7 +121,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" style="text-align:center;padding:3rem;color:#64748b;">
+                            <td colspan="8" style="text-align:center;padding:3rem;color:#78716c;">
                                 <div style="font-size:2rem;margin-bottom:0.5rem;">📭</div>
                                 <p>Belum ada data pengeluaran.</p>
                             </td>
