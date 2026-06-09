@@ -13,15 +13,26 @@ class DashboardController extends Controller
     {
         $now = now();
 
-        $totalPemasukan    = Pemasukan::whereMonth('tanggal', $now->month)->whereYear('tanggal', $now->year)->sum('nominal');
-        $totalPengeluaran  = Pengeluaran::whereMonth('tanggal', $now->month)->whereYear('tanggal', $now->year)->sum('nominal');
+        $totalPemasukan   = Pemasukan::whereMonth('tanggal', $now->month)->whereYear('tanggal', $now->year)->sum('nominal');
+        $totalPengeluaran = Pengeluaran::whereMonth('tanggal', $now->month)->whereYear('tanggal', $now->year)->sum('nominal');
 
-        // Saldo dihitung dinamis dari seluruh transaksi (bukan dari tabel rekening yang statis)
-        $totalPemasukanAll    = Pemasukan::sum('nominal');
-        $totalPengeluaranAll  = Pengeluaran::sum('nominal');
+        // Saldo dihitung dinamis dari seluruh transaksi
+        $totalPemasukanAll   = Pemasukan::sum('nominal');
+        $totalPengeluaranAll = Pengeluaran::sum('nominal');
         $saldo = $totalPemasukanAll - $totalPengeluaranAll;
 
-        // === Chart Mingguan — pakai addDays agar tidak tumpang tindih ===
+        // ============================================================
+        // BARU: Data approval untuk pendeta
+        // ============================================================
+        $pendingCount = Pengeluaran::where('status', 'pending')->count();
+        $pendingItems = Pengeluaran::with(['kategori', 'rekening'])
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+
+        // ============================================================
+        // Chart Mingguan
+        // ============================================================
         $weeklyLabels      = [];
         $pemasukanSeries   = [];
         $pengeluaranSeries = [];
@@ -42,7 +53,9 @@ class DashboardController extends Controller
             ])->sum('nominal');
         }
 
-        // === Kategori Pengeluaran untuk Donut Chart ===
+        // ============================================================
+        // Kategori Pengeluaran untuk Donut Chart
+        // ============================================================
         $categoryData = Pengeluaran::with('kategori')
             ->selectRaw('kategori_id, sum(nominal) as total')
             ->whereMonth('tanggal', $now->month)
@@ -53,7 +66,9 @@ class DashboardController extends Controller
         $categoryLabels = $categoryData->map(fn($item) => $item->kategori->nama ?? 'Lainnya')->toArray();
         $categoryValues = $categoryData->pluck('total')->toArray();
 
-        // === Transaksi Terbaru — tandai tipe agar view tidak perlu tebak-tebakan ===
+        // ============================================================
+        // Transaksi Terbaru
+        // ============================================================
         $latestPemasukan   = Pemasukan::latest()->take(8)->get()
             ->map(fn($i) => $i->setAttribute('_type', 'pemasukan'));
         $latestPengeluaran = Pengeluaran::latest()->take(8)->get()
@@ -71,7 +86,10 @@ class DashboardController extends Controller
             'pemasukanSeries',
             'pengeluaranSeries',
             'categoryLabels',
-            'categoryValues'
+            'categoryValues',
+            // BARU
+            'pendingCount',
+            'pendingItems',
         ));
     }
 }

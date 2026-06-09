@@ -23,6 +23,214 @@
 
     <div style="display:flex; flex-direction:column; gap:1.5rem;">
 
+
+@if(auth()->user()->isPendeta() && $pendingCount > 0)
+<div class="animate-in" style="
+    background: linear-gradient(135deg, rgba(180,100,0,0.18), rgba(200,150,26,0.08));
+    border: 1.5px solid rgba(200,150,26,0.45);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+">
+    {{-- Header --}}
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(200,150,26,0.2);display:flex;align-items:center;justify-content:center;">
+                <svg width="19" height="19" fill="none" viewBox="0 0 24 24" stroke="#f5d280">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div>
+                <p style="font-size:0.82rem;font-weight:700;color:#f5d280;">
+                    Menunggu Persetujuan Anda
+                </p>
+                <p style="font-size:0.72rem;color:#a8997a;margin-top:0.1rem;">
+                    {{ $pendingCount }} pengeluaran perlu ditinjau
+                </p>
+            </div>
+        </div>
+        <a href="{{ route('pengeluaran.index', ['status' => 'pending']) }}"
+           style="font-size:0.75rem;color:#c8961a;font-weight:600;text-decoration:none;
+                  border:1px solid rgba(200,150,26,0.35);padding:0.4rem 0.9rem;border-radius:8px;
+                  transition:all 0.2s;"
+           onmouseover="this.style.background='rgba(200,150,26,0.12)'"
+           onmouseout="this.style.background='transparent'">
+            Lihat semua →
+        </a>
+    </div>
+
+    {{-- Tabel pending --}}
+    <div style="display:flex;flex-direction:column;gap:0.5rem;">
+        @foreach($pendingItems->take(5) as $item)
+        <div style="
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0.85rem 1rem; border-radius:12px;
+            background:rgba(26,17,0,0.4); border:1px solid rgba(200,150,26,0.15);
+            flex-wrap:wrap; gap:0.5rem;
+        ">
+            {{-- Info transaksi --}}
+            <div style="display:flex;align-items:center;gap:0.75rem;min-width:0;flex:1;">
+                <div style="width:32px;height:32px;border-radius:8px;background:rgba(244,63,94,0.12);
+                            display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#f43f5e">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M17 13l-5 5m0 0l-5-5m5 5V6"/>
+                    </svg>
+                </div>
+                <div style="min-width:0;">
+                    <p style="font-size:0.82rem;font-weight:600;color:#f5d280;white-space:nowrap;
+                               overflow:hidden;text-overflow:ellipsis;">
+                        {{ $item->nomor_transaksi }}
+                    </p>
+                    <p style="font-size:0.72rem;color:#a8997a;margin-top:0.1rem;">
+                        {{ $item->kategori->nama ?? '-' }}
+                        &bull; {{ \Carbon\Carbon::parse($item->tanggal)->isoFormat('D MMM Y') }}
+                    </p>
+                </div>
+            </div>
+
+            {{-- Nominal --}}
+            <div style="text-align:right;flex-shrink:0;">
+                <p style="font-size:0.88rem;font-weight:700;color:#f87171;">
+                    -Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                </p>
+                @if($item->keterangan)
+                <p style="font-size:0.7rem;color:#78716c;margin-top:0.1rem;max-width:160px;
+                           overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                    {{ $item->keterangan }}
+                </p>
+                @endif
+            </div>
+
+            {{-- Tombol aksi --}}
+            <div style="display:flex;gap:0.5rem;flex-shrink:0;">
+                {{-- Tombol Setujui --}}
+                <form method="POST" action="{{ route('pengeluaran.approve', $item) }}"
+                      onsubmit="return confirm('Setujui pengeluaran {{ $item->nomor_transaksi }}?')">
+                    @csrf
+                    <button type="submit" style="
+                        font-size:0.75rem;font-weight:600;color:#fff;
+                        background:rgba(16,185,129,0.85);border:none;
+                        padding:0.45rem 0.9rem;border-radius:8px;cursor:pointer;
+                        transition:opacity 0.2s;
+                    " onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+                        ✓ Setujui
+                    </button>
+                </form>
+
+                {{-- Tombol Tolak — pakai modal sederhana --}}
+                <button type="button"
+                        onclick="document.getElementById('modal-reject-{{ $item->id }}').style.display='flex'"
+                        style="
+                            font-size:0.75rem;font-weight:600;color:#f87171;
+                            background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);
+                            padding:0.45rem 0.9rem;border-radius:8px;cursor:pointer;
+                            transition:all 0.2s;
+                        " onmouseover="this.style.background='rgba(244,63,94,0.2)'"
+                           onmouseout="this.style.background='rgba(244,63,94,0.1)'">
+                    ✕ Tolak
+                </button>
+            </div>
+        </div>
+
+        {{-- Modal Tolak per item --}}
+        <div id="modal-reject-{{ $item->id }}" style="
+            display:none; position:fixed; inset:0; z-index:999;
+            background:rgba(0,0,0,0.65); align-items:center; justify-content:center;
+        ">
+            <div style="
+                background:#1a1100; border:1px solid rgba(200,150,26,0.3);
+                border-radius:16px; padding:1.5rem; width:90%; max-width:420px;
+                box-shadow:0 20px 60px rgba(0,0,0,0.6);
+            ">
+                <h3 style="font-size:0.95rem;font-weight:700;color:#f5d280;margin-bottom:0.35rem;">
+                    Tolak Pengeluaran
+                </h3>
+                <p style="font-size:0.78rem;color:#a8997a;margin-bottom:1rem;">
+                    {{ $item->nomor_transaksi }} —
+                    Rp {{ number_format($item->nominal, 0, ',', '.') }}
+                </p>
+                <form method="POST" action="{{ route('pengeluaran.reject', $item) }}">
+                    @csrf
+                    <textarea name="catatan_reject"
+                              placeholder="Alasan penolakan (opsional)..."
+                              rows="3"
+                              style="
+                                  width:100%;box-sizing:border-box;
+                                  background:rgba(255,255,255,0.05);
+                                  border:1px solid rgba(200,150,26,0.2);
+                                  border-radius:8px;padding:0.65rem 0.85rem;
+                                  color:#f5d280;font-size:0.82rem;
+                                  resize:vertical;font-family:inherit;
+                                  margin-bottom:1rem;
+                              "
+                    ></textarea>
+                    <div style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                        <button type="button"
+                                onclick="document.getElementById('modal-reject-{{ $item->id }}').style.display='none'"
+                                style="font-size:0.8rem;color:#a8997a;background:none;border:1px solid rgba(200,150,26,0.2);
+                                       padding:0.5rem 1rem;border-radius:8px;cursor:pointer;">
+                            Batal
+                        </button>
+                        <button type="submit"
+                                style="font-size:0.8rem;color:#fff;background:rgba(220,38,38,0.8);
+                                       border:none;padding:0.5rem 1.1rem;border-radius:8px;
+                                       cursor:pointer;font-weight:600;">
+                            Tolak
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endforeach
+
+        @if($pendingCount > 5)
+        <p style="text-align:center;font-size:0.75rem;color:#78716c;margin-top:0.25rem;">
+            + {{ $pendingCount - 5 }} pengeluaran lainnya —
+            <a href="{{ route('pengeluaran.index', ['status' => 'pending']) }}"
+               style="color:#c8961a;text-decoration:none;">lihat semua</a>
+        </p>
+        @endif
+    </div>
+</div>
+@endif
+
+{{-- ============================================================
+     Jika user adalah bendahara, tampilkan info status pengajuan mereka
+     ============================================================ --}}
+@if(auth()->user()->isBendahara())
+@php
+    $myPending  = \App\Models\Pengeluaran::where('status','pending')->where('created_by', auth()->id())->count();
+    $myRejected = \App\Models\Pengeluaran::where('status','rejected')->where('created_by', auth()->id())
+                    ->whereNull('catatan_dibaca_at')->count();
+@endphp
+@if($myPending > 0 || $myRejected > 0)
+<div class="animate-in" style="
+    background:rgba(26,17,0,0.5); border:1px solid rgba(200,150,26,0.2);
+    border-radius:16px; padding:1rem 1.5rem;
+    display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+">
+    @if($myPending > 0)
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+        <span style="font-size:0.8rem;color:#f5d280;">
+            <strong>{{ $myPending }}</strong> pengajuan sedang menunggu persetujuan pendeta
+        </span>
+    </div>
+    @endif
+    @if($myRejected > 0)
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;"></span>
+        <a href="{{ route('pengeluaran.index', ['status' => 'rejected']) }}"
+           style="font-size:0.8rem;color:#f87171;text-decoration:none;">
+            <strong>{{ $myRejected }}</strong> pengajuan ditolak — klik untuk lihat alasan
+        </a>
+    </div>
+    @endif
+</div>
+@endif
+@endif
+
         <!-- Stat Cards -->
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1rem;" class="animate-in">
             <div class="stat-card stat-emerald">
